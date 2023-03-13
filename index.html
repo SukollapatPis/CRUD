@@ -1,0 +1,129 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basic CRUD</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+    <div>
+        <form onsubmit="event.preventDefault();FormSubmit();" autocomplete="off">
+            <div>
+                <label>ชื่อ-สกุล</label>
+                <input type="text" name="textFullName"
+                id="textFullName" required>
+            </div>
+            <div>
+                <label>ที่อยู่</label>
+                <input type="text" name="textAdress"
+                id="textAdress" required>                
+            </div>
+            <div>
+                <label>เงินเดือน</label>
+                <input type="number" name="textSal" min="0" step="500"
+                id="textSal" required>
+            </div><hr>
+            <div>
+                <input type="submit" value="บันทึก">
+            </div>
+        </form>
+    </div><br>
+    <div>
+        <table id="tblHuman" border="1">
+            <thead>
+                <tr>
+                    <th>ชื่อ-สกุล</th>
+                    <th>ที่อยู่</th>
+                    <th>เงินเดือน</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+    </div>
+    <!--<script src="main.js"></script>-->
+    <script>
+        let userSelected = null;
+
+function Read(){
+    let data = {};
+    data['textFullName'] = document.getElementById("textFullName").value;
+    data['textAdress'] = document.getElementById("textAdress").value;
+    data['textSal'] = document.getElementById("textSal").value;
+
+    return data;
+}
+
+function FormSubmit(){
+    let formData = Read();
+    if(userSelected == null){
+        Create(formData);
+    }
+    else{
+        Update(formData);
+    }
+    ClearForm();
+
+}
+
+function Create(data){
+    var table = document.getElementById("tblHuman").getElementsByTagName('tbody')[0];
+    var newRow = table.insertRow(table.length);
+
+    cell1 = newRow.insertCell(0);
+    cell1.innerHTML = data.textFullName;
+
+    cell2 = newRow.insertCell(1);
+    cell2.innerHTML = data.textAdress;
+
+    cell3 = newRow.insertCell(2);
+    cell3.innerHTML = data.textSal;
+
+    cell4 = newRow.insertCell(3);
+    cell4.innerHTML = '<a onClick="Edit(this)">แก้ไข </a><a onClick="Delete(this)"> ลบ</a>';
+}
+function ClearForm(){
+    document.getElementById("textFullName").value="";
+    document.getElementById("textAdress").value="";
+    document.getElementById("textSal").value=0;
+    userSelected = null;
+}
+function Edit(td){
+    userSelected = td.parentElement.parentElement;
+    document.getElementById("textFullName").value = userSelected.cells[0].innerHTML;
+    document.getElementById("textAdress").value = userSelected.cells[1].innerHTML;
+    document.getElementById("textSal").value = userSelected.cells[2].innerHTML;
+}
+function Update(formData){
+    userSelected.cells[0].innerHTML = formData.textFullName;
+    userSelected.cells[1].innerHTML = formData.textAdress;
+    userSelected.cells[2].innerHTML = formData.textSal;
+}
+function Delete(td){
+    if(confirm('คุณต้องการข้อมูลแถวนี้ใช่หรือไม่?')){
+        let row = td.parentElement.parentElement;
+        document.getElementById("tblHuman").deleteRow(row.rowIndex);
+
+        ClearForm();
+    }
+}
+
+
+
+
+
+
+    </script>
+</body>
+
+</html>
